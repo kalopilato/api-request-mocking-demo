@@ -1,38 +1,85 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
+  width: 100vw;
 }
 
-.App-link {
-  color: #61dafb;
+.App-description {
+  max-width: 60%;
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App-header {
+  height: 2rem;
+  padding: 2rem 4rem;
+  color: #10a2f5;
+}
+
+.App-heading {
+  font-size: calc(10px + 2vmin);
+  padding: 0;
+  margin: 0;
+  width: fit-content;
+}
+
+.App-footer {
+  height: 2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.App-footer p {
+  margin: .25rem 0;
+}
+
+.App-search-form {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+}
+
+.App-search-heading {
+  margin-top: 2rem;
+}
+
+.App-search-input {
+  width: 20rem;
+  flex-grow: 1;
+  margin-right: 2rem;
+  padding: .75rem;
+}
+
+.App-search-button {
+  width: 7rem;
+}
+
+.App-search-results-container {
+  padding: 2rem 0;
+  width: 60%;
+  overflow: hidden;
+}
+
+.DocumentSearchResult-item {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
+}
+
+.DocumentSearchResult-item:hover {
+  background-color: rgba(0,0,0,.2);
+}
+
+.DocumentSearchResult-image-container {
+  width: 10rem;
+  min-width: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

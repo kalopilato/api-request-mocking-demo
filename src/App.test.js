@@ -1,8 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-test('renders learn react link', () => {
+import App from "./App";
+
+it("enables the search button after entering text", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  let searchButton = screen.getByRole("button", { name: /^search$/i });
+  expect(searchButton).toBeDisabled();
+  userEvent.type(screen.getByLabelText(/^search$/i), "the secret life of cats");
+  expect(searchButton).not.toBeDisabled();
 });
