@@ -105,6 +105,7 @@ const DocumentSearchResult = ({ document }) => {
       <div>
         <p>{`${document.title} by ${document.author_name}`}</p>
         <p>{`First published: ${document.first_publish_year}`}</p>
+        <p>Mocked store link: {document.store_link}</p>
       </div>
     </li>
   );

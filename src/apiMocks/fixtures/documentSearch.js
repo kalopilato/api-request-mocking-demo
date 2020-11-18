@@ -66,6 +66,7 @@ const successResponse = {
         "Secret Life of Cats",
       ],
       publish_date: ["April 1, 2007", "2010", "August 2006"],
+      store_link: "https://fake.store.com/2",
     },
     {
       has_fulltext: false,
@@ -106,6 +107,7 @@ const successResponse = {
         "Macmillan Pub Co",
       ],
       publish_date: ["February 1983"],
+      store_link: "https://fake.store.com/1",
     },
   ],
 };

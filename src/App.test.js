@@ -25,7 +25,9 @@ it("searches for a document and displays the results", async () => {
   userEvent.click(searchButton);
 
   await screen.findByText(/^the secret life of cats by claire bessant$/i);
+  screen.getByText(/^mocked store link: https:\/\/fake.store.com\/1$/i);
   screen.getByText(/^the secret life of cats by ralph reese$/i);
+  screen.getByText(/^mocked store link: https:\/\/fake.store.com\/2$/i);
 });
 
 // And we can override the default handler in `server.js` to define responses case by case
