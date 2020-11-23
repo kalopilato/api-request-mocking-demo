@@ -1,6 +1,7 @@
 import { rest } from "msw";
 
 import searchResults from "./fixtures/documentSearch";
+import readingList from "./fixtures/readingList";
 
 function createConfigurableHandler(method, resource, defaultFixture) {
   return ({ fixture = defaultFixture, status = 200, delay = 0 } = {}) => {
@@ -16,7 +17,19 @@ const searchDocuments = createConfigurableHandler(
   searchResults
 );
 
-const handlers = [searchDocuments()];
+const getReadingList = createConfigurableHandler(
+  "get",
+  "https://openlibrary.org/reading_list",
+  readingList
+);
+
+const addToReadingList = createConfigurableHandler(
+  "post",
+  "https://openlibrary.org/reading_list/add",
+  undefined
+);
+
+const handlers = [getReadingList(), searchDocuments(), addToReadingList()];
 
 export default handlers;
-export { searchDocuments };
+export { addToReadingList, getReadingList, searchDocuments };

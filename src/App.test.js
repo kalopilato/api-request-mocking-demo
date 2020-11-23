@@ -1,8 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { server } from "./apiMocks/server";
-import { searchDocuments } from "./apiMocks/handlers";
-import { errorResponse } from "./apiMocks/fixtures/documentSearch";
+import { getReadingList, searchDocuments } from "./apiMocks/handlers";
+import documentSearch, {
+  errorResponse,
+} from "./apiMocks/fixtures/documentSearch";
+import readingList from "./apiMocks/fixtures/readingList";
 
 import App from "./App";
 
@@ -60,4 +63,29 @@ it("can retry searching for a document after receiving an error the first time",
   userEvent.click(searchButton);
   await screen.findByText(/^the secret life of cats by claire bessant$/i);
   screen.getByText(/^the secret life of cats by ralph reese$/i);
+});
+
+it("can add a book to the reading list", async () => {
+  render(<App />);
+
+  userEvent.type(screen.getByLabelText(/^search$/i), "the secret life of cats");
+  userEvent.click(screen.getByRole("button", { name: /^search$/i }));
+
+  await screen.findByText(/^the secret life of cats by claire bessant$/i);
+  let addToReadingListButtons = screen.getAllByText(/^add to reading list$/i);
+  expect(addToReadingListButtons.length).toEqual(2);
+  expect(
+    screen.queryByText(/^added to mocked reading list!$/i)
+  ).not.toBeInTheDocument();
+
+  server.use(
+    getReadingList({
+      fixture: { works: [...readingList.works, documentSearch.docs[0].key] },
+    })
+  );
+
+  userEvent.click(addToReadingListButtons[0]);
+  await screen.findByText(/^adding...$/i);
+  await screen.findByText(/^added to mocked reading list!$/i);
+  screen.getByText(/^add to reading list$/i);
 });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, queryCache } from "react-query";
 import axios from "axios";
 
 import "./App.css";
@@ -12,6 +12,8 @@ function App() {
     searchError,
     search,
   } = useDocumentSearch(searchText);
+
+  const { readingList } = useReadingList();
 
   function handleSearch(e) {
     e.preventDefault();
@@ -67,7 +69,13 @@ function App() {
           {searchResults ? (
             <ul>
               {searchResults.docs.map((document) => (
-                <DocumentSearchResult key={document.key} document={document} />
+                <DocumentSearchResult
+                  key={document.key}
+                  document={document}
+                  isOnReadingList={
+                    readingList?.works.includes(document.key) ?? false
+                  }
+                />
               ))}
             </ul>
           ) : null}
@@ -91,7 +99,15 @@ function App() {
   );
 }
 
-const DocumentSearchResult = ({ document }) => {
+function DocumentSearchResult({ document, isOnReadingList = false }) {
+  const [addToReadingList, { status }] = useMutation(
+    (workId) =>
+      axios.post("https://openlibrary.org/reading_list/add", { workId }),
+    {
+      onSuccess: () => queryCache.invalidateQueries("readingList"),
+    }
+  );
+
   return (
     <li key={document.key} className="DocumentSearchResult-item">
       <div className="DocumentSearchResult-image-container">
@@ -106,12 +122,23 @@ const DocumentSearchResult = ({ document }) => {
         <p>{`${document.title} by ${document.author_name}`}</p>
         <p>{`First published: ${document.first_publish_year}`}</p>
         <p>Mocked store link: {document.store_link}</p>
+        {isOnReadingList ? (
+          <p>Added to mocked reading list!</p>
+        ) : (
+          <button
+            type="button"
+            onClick={() => addToReadingList(document.key)}
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? "Adding..." : "Add to reading list"}
+          </button>
+        )}
       </div>
     </li>
   );
-};
+}
 
-const useDocumentSearch = (searchText) => {
+function useDocumentSearch(searchText) {
   const {
     data: searchResults,
     status: searchStatus,
@@ -135,6 +162,21 @@ const useDocumentSearch = (searchText) => {
   );
 
   return { searchResults, searchStatus, searchError, search };
+}
+
+const useReadingList = () => {
+  const {
+    data: readingList,
+    status: readingListStatus,
+    error: readingListError,
+    refetch: fetchReadingList,
+  } = useQuery(["readingList"], () => {
+    return axios
+      .get(`https://openlibrary.org/reading_list`)
+      .then(({ data }) => data);
+  });
+
+  return { readingList, readingListStatus, readingListError, fetchReadingList };
 };
 
 export default App;
