@@ -20,7 +20,13 @@ const searchDocuments = createConfigurableHandler(
 const getReadingList = createConfigurableHandler(
   "get",
   "https://openlibrary.org/reading_list",
-  readingList
+  { works: [] }
+);
+
+const getReadingListRelative = createConfigurableHandler(
+  "get",
+  "/reading_list",
+  { works: [] }
 );
 
 const addToReadingList = createConfigurableHandler(
@@ -29,7 +35,7 @@ const addToReadingList = createConfigurableHandler(
   undefined
 );
 
-const handlers = [getReadingList(), searchDocuments(), addToReadingList()];
+const handlers = [getReadingList(), searchDocuments(), addToReadingList(), getReadingListRelative()];
 
 export default handlers;
 export { addToReadingList, getReadingList, searchDocuments };
